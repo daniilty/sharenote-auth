@@ -17,3 +17,13 @@ func (r *registerRequest) toService() *core.UserInfo {
 		Password: r.Password,
 	}
 }
+
+func convertCoreUserInfoToResponse(u *core.UserInfo) *userInfoResponse {
+	return &userInfoResponse{
+		ID:             u.ID,
+		Email:          u.Email,
+		Name:           u.Name,
+		UserName:       u.UserName,
+		EmailConfirmed: u.EmailConfirmed,
+	}
+}

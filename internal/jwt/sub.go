@@ -16,6 +16,15 @@ func (s *Subject) updateExpiry(exp int64) {
 	s.Expires = time.Now().Unix() + exp
 }
 
+func (m *ManagerImpl) ParseRawToken(accessToken string) (*Subject, error) {
+	token, err := jwt.Parse([]byte(accessToken), jwt.WithKeySet(m.pubSet))
+	if err != nil {
+		return nil, err
+	}
+
+	return getTokenSubject(token)
+}
+
 func getTokenSubject(token jwt.Token) (*Subject, error) {
 	const (
 		uidParamName = "uid"
@@ -23,7 +32,7 @@ func getTokenSubject(token jwt.Token) (*Subject, error) {
 
 	uid, ok := token.Get(uidParamName)
 	if !ok {
-		return nil, fmt.Errorf("no %d param", uidParamName)
+		return nil, fmt.Errorf("no %s param", uidParamName)
 	}
 
 	uidString, ok := uid.(string)

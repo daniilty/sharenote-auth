@@ -30,3 +30,10 @@ func getInternalServerErrorWithMsgResponse(msg string) errorResponse {
 		ErrorInfo: msg,
 	}
 }
+
+func getUnauthorizedErrorWithMsgResponse(msg string) errorResponse {
+	return errorResponse{
+		Status:    http.StatusUnauthorized,
+		ErrorInfo: msg,
+	}
+}

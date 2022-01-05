@@ -19,9 +19,14 @@ type UserInfo struct {
 	Password string
 }
 
-func (s *ServiceImpl) GetUserInfo(ctx context.Context, uid string) (*UserInfo, bool, error) {
+func (s *ServiceImpl) GetUserInfo(ctx context.Context, accessToken string) (*UserInfo, bool, error) {
+	sub, err := s.jwtManager.ParseRawToken(accessToken)
+	if err != nil {
+		return nil, true, fmt.Errorf("invalid access token provided")
+	}
+
 	resp, err := s.usersClient.GetUser(ctx, &schema.GetUserRequest{
-		Id: uid,
+		Id: sub.UID,
 	})
 	if err != nil {
 		if status.Code(err) == codes.InvalidArgument {

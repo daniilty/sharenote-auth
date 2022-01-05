@@ -17,6 +17,8 @@ type Manager interface {
 	Refresh(string) (string, error)
 	// JWKS - get public key jwks so we can use it for proxy-side validation.
 	JWKS() []byte
+	// ParseRawToken - parse raw access token string with manager public key set.
+	ParseRawToken(string) (*Subject, error)
 }
 
 type ManagerImpl struct {
@@ -25,6 +27,7 @@ type ManagerImpl struct {
 	publicKey  jwk.Key
 	tokenExp   int64
 	jwksBytes  []byte
+	pubSet     jwk.Set
 }
 
 func NewManagerImpl(pubKeyBytes []byte, privKeyBytes []byte, exp int64) (*ManagerImpl, error) {
@@ -68,11 +71,15 @@ func NewManagerImpl(pubKeyBytes []byte, privKeyBytes []byte, exp int64) (*Manage
 		return nil, fmt.Errorf("get public bytes: %w", err)
 	}
 
+	pubJWKS := jwk.NewSet()
+	pubJWKS.Add(publicJWTKey)
+
 	return &ManagerImpl{
 		alg:        alg,
 		privateKey: privateJWTKey,
 		publicKey:  publicJWTKey,
 		tokenExp:   exp,
 		jwksBytes:  pubJWKSBytes,
+		pubSet:     pubJWKS,
 	}, nil
 }

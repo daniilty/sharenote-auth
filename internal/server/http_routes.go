@@ -20,4 +20,8 @@ func (h *HTTP) setRoutes(r *mux.Router) {
 	api.HandleFunc("/jwks",
 		h.jwks,
 	).Methods(http.MethodGet)
+
+	api.HandleFunc("/me",
+		h.me,
+	).Methods(http.MethodGet)
 }
