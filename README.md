@@ -21,7 +21,7 @@ $ openssl rsa -in private.pem -out private_unencrypted.pem -outform PEM
 * POST `/api/v1/auth/register` - register user. Body:
 ```
 {
-	"email": "sample@sample.com",
+  "email": "sample@sample.com",
   "password": "sample",
   "name": "Biggus Dickus",
   "userName": "sample"
