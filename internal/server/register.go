@@ -3,6 +3,8 @@ package server
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/daniilty/sharenote-auth/internal/validate"
 )
 
 type registerRequest struct {
@@ -17,6 +19,11 @@ func (r *registerRequest) validate() error {
 		return fmt.Errorf("email cannot be empty")
 	}
 
+	err := validate.Email(r.Email)
+	if err != nil {
+		return err
+	}
+
 	if r.Name == "" {
 		return fmt.Errorf("name cannot be empty")
 	}
@@ -29,7 +36,9 @@ func (r *registerRequest) validate() error {
 		return fmt.Errorf("password cannot be empty")
 	}
 
-	return nil
+	err = validate.Password(r.Password, 8, true)
+
+	return err
 }
 
 func (h *HTTP) register(w http.ResponseWriter, r *http.Request) {
