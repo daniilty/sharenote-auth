@@ -3,6 +3,7 @@ package jwt
 import (
 	"fmt"
 
+	"github.com/daniilty/sharenote-auth/claims"
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jwk"
 )
@@ -12,13 +13,13 @@ var _ Manager = (*ManagerImpl)(nil)
 // Manager - jwt token signer, refresher, etc...
 type Manager interface {
 	// Generate - generate rs256 jwt token with sub.
-	Generate(*Subject) (string, error)
+	Generate(*claims.Subject) (string, error)
 	// Refresh - generate new token if old one is expired.
 	Refresh(string) (string, error)
 	// JWKS - get public key jwks so we can use it for proxy-side validation.
 	JWKS() []byte
 	// ParseRawToken - parse raw access token string with manager public key set.
-	ParseRawToken(string) (*Subject, error)
+	ParseRawToken(string) (*claims.Subject, error)
 }
 
 type ManagerImpl struct {

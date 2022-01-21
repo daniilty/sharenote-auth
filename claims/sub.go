@@ -1,4 +1,4 @@
-package jwt
+package claims
 
 import (
 	"fmt"
@@ -12,20 +12,11 @@ type Subject struct {
 	Expires int64  `json:"exp"`
 }
 
-func (s *Subject) updateExpiry(exp int64) {
+func (s *Subject) UpdateExpiry(exp int64) {
 	s.Expires = time.Now().Unix() + exp
 }
 
-func (m *ManagerImpl) ParseRawToken(accessToken string) (*Subject, error) {
-	token, err := jwt.Parse([]byte(accessToken), jwt.WithKeySet(m.pubSet))
-	if err != nil {
-		return nil, err
-	}
-
-	return getTokenSubject(token)
-}
-
-func getTokenSubject(token jwt.Token) (*Subject, error) {
+func GetTokenSubject(token jwt.Token) (*Subject, error) {
 	const (
 		uidParamName = "uid"
 	)

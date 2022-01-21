@@ -3,11 +3,12 @@ package jwt
 import (
 	"encoding/json"
 
+	"github.com/daniilty/sharenote-auth/claims"
 	"github.com/lestrrat-go/jwx/jws"
 )
 
-func (m *ManagerImpl) Generate(sub *Subject) (string, error) {
-	sub.updateExpiry(m.tokenExp)
+func (m *ManagerImpl) Generate(sub *claims.Subject) (string, error) {
+	sub.UpdateExpiry(m.tokenExp)
 
 	bb, err := json.Marshal(sub)
 	if err != nil {

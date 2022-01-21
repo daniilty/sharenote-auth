@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/daniilty/sharenote-auth/internal/jwt"
+	"github.com/daniilty/sharenote-auth/claims"
 	schema "github.com/daniilty/sharenote-grpc-schema"
 )
 
@@ -35,7 +35,7 @@ func (s *ServiceImpl) Login(ctx context.Context, data *LoginData) (string, bool,
 		return "", false, err
 	}
 
-	accessToken, err := s.jwtManager.Generate(&jwt.Subject{
+	accessToken, err := s.jwtManager.Generate(&claims.Subject{
 		UID: userResp.User.GetId(),
 	})
 	if err != nil {

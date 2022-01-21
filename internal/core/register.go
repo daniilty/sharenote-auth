@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/daniilty/sharenote-auth/internal/jwt"
+	"github.com/daniilty/sharenote-auth/claims"
 	schema "github.com/daniilty/sharenote-grpc-schema"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -25,7 +25,7 @@ func (s *ServiceImpl) Register(ctx context.Context, user *UserInfo) (string, boo
 		return "", false, err
 	}
 
-	accessToken, err := s.jwtManager.Generate(&jwt.Subject{
+	accessToken, err := s.jwtManager.Generate(&claims.Subject{
 		UID: resp.GetId(),
 	})
 	if err != nil {
